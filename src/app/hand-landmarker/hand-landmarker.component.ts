@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FilesetResolver, HandLandmarker, DrawingUtils } from '@mediapipe/tasks-vision';
+import { GlowButtonComponent } from '../glow-button/glow-button.component';
 
 
 @Component({
   standalone: true,
+  imports: [GlowButtonComponent],
   selector: 'app-hand-landmarker',
   templateUrl: './hand-landmarker.component.html',
   styleUrls: ['./hand-landmarker.component.css']
@@ -11,6 +13,8 @@ import { FilesetResolver, HandLandmarker, DrawingUtils } from '@mediapipe/tasks-
 export class HandLandmarkerComponent implements OnInit {
   @ViewChild('videoElement', { static: true }) videoElement?: ElementRef<HTMLVideoElement>;
   @ViewChild('canvasElement', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
+
+  @ViewChild(GlowButtonComponent) childComponent!: GlowButtonComponent;
 
   private handLandmarker: any;
   private running: boolean = false;
@@ -221,6 +225,8 @@ export class HandLandmarkerComponent implements OnInit {
     } else {
         this.isClicking = false;
     }
+
+    this.childComponent.track(indexFingerTip.x, indexFingerTip.y, this.isClicking);
 }
 
   handleClick(x:number, y: number) {
@@ -236,7 +242,6 @@ export class HandLandmarkerComponent implements OnInit {
       const distance = Math.sqrt((bug.x - x) ** 2 + (bug.y - y) ** 2);
       if (distance < this.bugRadius && !bug.exploding) {
         bug.exploding = true;  // Trigger explosion
-        //this.score++;
         this.caught++;
       }
     });

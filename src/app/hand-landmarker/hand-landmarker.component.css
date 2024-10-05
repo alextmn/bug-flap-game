@@ -1,0 +1,20 @@
+.container {
+  display: flex; /* This aligns the divs horizontally */
+  justify-content: space-between; /* Optional: controls spacing between them */
+}
+
+.green-box, .red-box {
+  padding: 20px;
+  font-size: 24px; /* Large font size */
+  color: white; /* Font color */
+  width: 45%; /* Width of each box */
+  text-align: center; /* Center text inside each box */
+}
+
+.green-box {
+  background-color: green; /* Green background */
+}
+
+.red-box {
+  background-color: red; /* Red background */
+}

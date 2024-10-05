@@ -1,5 +1,10 @@
-<div>
-    <video #videoElement width="640" height="480" style="display:none"></video>
-    <canvas #canvasElement width="640" height="480"  style="transform: scaleX(-1);"></canvas>
+<div style=" display: flex; justify-content: center;">
+  <div style="position: relative;">
+      <video #videoElement width="640" height="480" style="display:none"></video>
+      <canvas #canvasElement width="640" height="480"  style="transform: scaleX(-1);"></canvas>
+      <app-glow-button ></app-glow-button>
   </div>
-  <div>hits: {{hits}} </div><div>bugs caught: {{caught}} </div>
+</div>
+<div class="container">
+  <div class="green-box">Pull Request Created: {{hits}} </div><div class="red-box">Bugs Caught: {{caught}} </div>
+</div>
