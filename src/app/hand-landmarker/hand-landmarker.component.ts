@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FilesetResolver, HandLandmarker, DrawingUtils } from '@mediapipe/tasks-vision';
 import { GlowButtonComponent } from '../glow-button/glow-button.component';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   standalone: true,
-  imports: [GlowButtonComponent],
+  imports: [GlowButtonComponent, CommonModule ],
   selector: 'app-hand-landmarker',
   templateUrl: './hand-landmarker.component.html',
   styleUrls: ['./hand-landmarker.component.css']
@@ -14,16 +15,17 @@ export class HandLandmarkerComponent implements OnInit {
   @ViewChild('videoElement', { static: true }) videoElement?: ElementRef<HTMLVideoElement>;
   @ViewChild('canvasElement', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
 
-  @ViewChild(GlowButtonComponent) childComponent!: GlowButtonComponent;
+  @ViewChild(GlowButtonComponent) childComponent?: GlowButtonComponent;
 
   private handLandmarker: any;
   private running: boolean = false;
   private isClicking = false;
+  iAmReadyButtonEnabled = true;
 
   bugs:any = [];
   bugRadius = 20;
-  score = 0;
   bugImage?: HTMLImageElement;
+  code5Bugs?: HTMLImageElement;
   hits = 0;
   caught = 0;
 
@@ -31,8 +33,18 @@ export class HandLandmarkerComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.loadBugImage();
-    this.spawnBugs();
     await this.initializeHandLandmarker();
+  }
+
+  iAmReady(b: boolean) {
+    this.hits = 0;
+    this.caught = 0;
+    this.iAmReadyButtonEnabled = false;
+    this.spawnBugs();
+  }
+
+  gameOver() {
+    this.iAmReadyButtonEnabled = true
   }
 
     // Create bugs at random positions
@@ -50,10 +62,17 @@ export class HandLandmarkerComponent implements OnInit {
     }
   loadBugImage() {
     this.bugImage = new Image();
-    this.bugImage.src = 'assets/bug.png';  // Make sure the image is in the assets folder
+    this.bugImage.src = 'assets/bug.png';  
     this.bugImage.onload = () => {
       console.log("Bug image loaded");
     };
+
+    this.code5Bugs = new Image();
+    this.code5Bugs.src = 'assets/code_5_bugs.png'; 
+    this.code5Bugs.onload = () => {
+      console.log("code image loaded");
+    };
+    
   }
 
   renderBugs(ctx:any) {
@@ -63,6 +82,9 @@ export class HandLandmarkerComponent implements OnInit {
         // Animate explosion
         bug.explosionTime += 0.1;
         if (bug.explosionTime > 1) {
+          if (this.bugs.length === 1) {
+            this.gameOver();
+          }
           return false; // Remove the bug after the explosion
         }
         this.drawExplosion(ctx, bug.x, bug.y, bug.explosionTime);
@@ -82,6 +104,7 @@ export class HandLandmarkerComponent implements OnInit {
       return true; // Keep the bug in the array if it's not exploded yet
     });
   }
+
 
     // Draw a bug using the image
     drawBug(ctx:any, x: number, y: number) {
@@ -152,6 +175,7 @@ export class HandLandmarkerComponent implements OnInit {
     const video = this.videoElement!!.nativeElement;
     const canvas = this.canvasElement!!.nativeElement;
     const ctx = canvas.getContext('2d')!!;
+    
 
     const detectHands = async () => {
       if (!this.running) return;
@@ -163,6 +187,12 @@ export class HandLandmarkerComponent implements OnInit {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+      ctx.save();
+      // Flip the canvas horizontally by scaling by -1 along the x-axis
+      ctx.scale(-1, 1);
+      ctx.drawImage(this.code5Bugs!!, -360, 300, 350, 150);
+      ctx.restore();
+      
       if (results.landmarks.length > 0) {
         for (const landmarks of results.landmarks) {
           this.detectClick(landmarks)
@@ -174,6 +204,8 @@ export class HandLandmarkerComponent implements OnInit {
           drawingUtils.drawLandmarks(landmarks, { color: "#FF0000", lineWidth: 1 }); 
         }
       }
+
+
 
       this.renderBugs(ctx)
 
@@ -226,7 +258,7 @@ export class HandLandmarkerComponent implements OnInit {
         this.isClicking = false;
     }
 
-    this.childComponent.track(indexFingerTip.x, indexFingerTip.y, this.isClicking);
+    this.childComponent?.track(indexFingerTip.x, indexFingerTip.y, this.isClicking);
 }
 
   handleClick(x:number, y: number) {
@@ -234,7 +266,7 @@ export class HandLandmarkerComponent implements OnInit {
     const rect = this.canvasElement!!.nativeElement.getBoundingClientRect();
     x = x*rect.width;
     y = y*rect.height;
-    console.log(`Click detected! ${x}, ${y} ${this.bugs[0].x} ${this.bugs[0].y}`);
+    //console.log(`Click detected! ${x}, ${y} ${this.bugs[0].x} ${this.bugs[0].y}`);
     // Simulate a click or trigger an action here
     // For example, you can simulate a mouse click on an element
     // or change something visually on the page.

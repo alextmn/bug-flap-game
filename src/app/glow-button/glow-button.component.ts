@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { RetryConfig } from 'rxjs';
 
 @Component({

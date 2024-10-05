@@ -2,7 +2,8 @@
   <div style="position: relative;">
       <video #videoElement width="640" height="480" style="display:none"></video>
       <canvas #canvasElement width="640" height="480"  style="transform: scaleX(-1);"></canvas>
-      <app-glow-button ></app-glow-button>
+      <app-glow-button text="I Am Ready!" (onClick)="iAmReady(true)" *ngIf="iAmReadyButtonEnabled"></app-glow-button>
+      
   </div>
 </div>
 <div class="container">
