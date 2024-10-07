@@ -21,6 +21,7 @@ export class HandLandmarkerComponent implements OnInit {
   private running: boolean = false;
   private isClicking = false;
   iAmReadyButtonEnabled = true;
+  gameOverMessage = '';
 
   bugs:any = [];
   bugRadius = 20;
@@ -39,12 +40,19 @@ export class HandLandmarkerComponent implements OnInit {
   iAmReady(b: boolean) {
     this.hits = 0;
     this.caught = 0;
+    this.gameOverMessage = '';
     this.iAmReadyButtonEnabled = false;
     this.spawnBugs();
   }
 
   gameOver() {
     this.iAmReadyButtonEnabled = true
+    const score = this.caught / this.hits;
+    if (score > .8) this.gameOverMessage = 'You Are An Expert!';
+    else if (score > .5) this.gameOverMessage = 'You Are A Senior Developer!';
+    else if (score > .1) this.gameOverMessage = 'You Are A Junior Developer!';
+    else this.gameOverMessage = 'You Are Not A Developer!';
+
   }
 
     // Create bugs at random positions
@@ -192,7 +200,7 @@ export class HandLandmarkerComponent implements OnInit {
       ctx.scale(-1, 1);
       ctx.drawImage(this.code5Bugs!!, -360, 300, 350, 150);
       ctx.restore();
-      
+
       if (results.landmarks.length > 0) {
         for (const landmarks of results.landmarks) {
           this.detectClick(landmarks)
@@ -262,6 +270,7 @@ export class HandLandmarkerComponent implements OnInit {
 }
 
   handleClick(x:number, y: number) {
+    if (this.iAmReadyButtonEnabled) return;
     this.hits++;
     const rect = this.canvasElement!!.nativeElement.getBoundingClientRect();
     x = x*rect.width;

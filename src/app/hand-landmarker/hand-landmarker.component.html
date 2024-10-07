@@ -5,6 +5,7 @@
       <app-glow-button text="I Am Ready!" (onClick)="iAmReady(true)" *ngIf="iAmReadyButtonEnabled"></app-glow-button>
       
   </div>
+  <h1 style="font-size: 48px; color: chocolate;" *ngIf="gameOverMessage">{{gameOverMessage}}</h1>
 </div>
 <div class="container">
   <div class="green-box">Pull Request Created: {{hits}} </div><div class="red-box">Bugs Caught: {{caught}} </div>
