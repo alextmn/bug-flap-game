@@ -1,5 +1,7 @@
 # AI Video Coding Interview
 
+![AI Video Coding Interview](ai-codinging-interview-1.gif)
+
 This project demonstrates how to use hand gestures in a browser with AI running as WebAssembly. It utilizes [MediaPipe](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker), a framework developed by Google, which processes and tracks hand gestures in real time. The project runs TensorFlow directly in the browser for gesture recognition, leveraging WebAssembly for fast, efficient execution without needing backend infrastructure.
 
 This setup highlights the power of on-device machine learning for browser applications, offering fast, private, and interactive AI experiences.
