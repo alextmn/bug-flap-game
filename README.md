@@ -1,5 +1,5 @@
 # AI Video Coding Interview
-
+[Online Demo: https://alextmn.github.io/bug-flap-game/](https://alextmn.github.io/bug-flap-game/)
 ![AI Video Coding Interview](ai-codinging-interview-1.gif)
 
 This project demonstrates how to use hand gestures in a browser with AI running as WebAssembly. It utilizes [MediaPipe](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker), a framework developed by Google, which processes and tracks hand gestures in real time. The project runs TensorFlow directly in the browser for gesture recognition, leveraging WebAssembly for fast, efficient execution without needing backend infrastructure.
